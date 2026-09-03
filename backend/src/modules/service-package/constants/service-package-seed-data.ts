@@ -1,0 +1,186 @@
+import { CreateServicePackageDto } from '../dto/create-service-package.dto';
+
+export const SERVICE_PACKAGE_SEED_DATA: (CreateServicePackageDto & {
+  classDays?: string[];
+  classTime?: string;
+  instructor?: string;
+  classroom?: string;
+})[] = [
+  {
+    name: 'Gói tập Gym 1 tháng',
+    description:
+      'Truy cập không giới hạn phòng tập gym hiện đại trong 1 tháng. Được đo inbody và tư vấn lộ trình tập luyện miễn phí.',
+    basePrice: 500000,
+    imageUrl: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48',
+    category: 'gym',
+    features: [
+      'Truy cập phòng gym 24/7',
+      'Đo chỉ số cơ thể Inbody',
+      'Tủ đồ thông minh',
+      'Nước uống miễn phí',
+    ],
+    serviceDuration: '1 tháng',
+    venueScope: 'Toàn hệ thống',
+    isFeatured: true,
+    isActive: true,
+    sortOrder: 0,
+  },
+  {
+    name: 'Gói tập Gym 12 tháng (Thành viên Vàng)',
+    description:
+      'Gói tập gym dài hạn 12 tháng với ưu đãi cực lớn. Tặng kèm 5 buổi tập cùng huấn luyện viên cá nhân (PT).',
+    basePrice: 4800000,
+    imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87',
+    category: 'gym',
+    features: [
+      'Truy cập phòng gym 24/7',
+      'Đo chỉ số Inbody định kỳ',
+      '5 buổi tập cùng HLV cá nhân',
+      'Giảm 10% các dịch vụ khác',
+    ],
+    serviceDuration: '12 tháng',
+    venueScope: 'Toàn hệ thống',
+    isFeatured: true,
+    isActive: true,
+    sortOrder: 1,
+  },
+  {
+    name: 'Lớp học Yoga cơ bản (Phục hồi)',
+    description:
+      'Lớp học Yoga phục hồi, học cách hít thở và giải tỏa căng thẳng cho người mới bắt đầu.',
+    basePrice: 1200000,
+    imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b',
+    category: 'yoga',
+    features: [
+      'Thảm tập chuyên dụng sạch sẽ',
+      'Nước uống thảo mộc',
+      'Tối đa 15 học viên/lớp',
+    ],
+    maxGuests: 15,
+    classDays: ['Thứ 2', 'Thứ 4', 'Thứ 6'],
+    classTime: '18:30 - 19:30',
+    instructor: 'HLV Sophia Lee',
+    classroom: 'Phòng Yoga Studio 1',
+    isFeatured: true,
+    isActive: true,
+    sortOrder: 2,
+  },
+  {
+    name: 'Lớp học Kickboxing nâng cao',
+    description:
+      'Lớp học rèn luyện thể lực vượt trội, tăng khả năng tự vệ và giảm mỡ hiệu quả cùng võ sư chuyên nghiệp.',
+    basePrice: 1500000,
+    imageUrl: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd',
+    category: 'kickboxing',
+    features: [
+      'Đầy đủ dụng cụ bảo hộ',
+      'Bao cát chất lượng cao',
+      'Tối đa 12 học viên/lớp',
+    ],
+    maxGuests: 12,
+    classDays: ['Thứ 3', 'Thứ 5'],
+    classTime: '19:00 - 20:30',
+    instructor: 'HLV Marcus Johnson',
+    classroom: 'Phòng Studio 2',
+    isFeatured: true,
+    isActive: true,
+    sortOrder: 3,
+  },
+  {
+    name: 'Trị liệu Massage thể thao',
+    description:
+      'Massage giãn cơ chuyên sâu giúp phục hồi cơ bắp và giảm đau mỏi sau tập luyện nặng.',
+    basePrice: 600000,
+    imageUrl: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874',
+    category: 'massage',
+    features: [
+      'Tinh dầu thiên nhiên cao cấp',
+      'Kỹ thuật viên lành nghề',
+      'Phòng massage riêng tư',
+    ],
+    serviceDuration: '60 phút',
+    venueScope: 'Khu phục hồi tầng 2',
+    isFeatured: false,
+    isActive: true,
+    sortOrder: 4,
+  },
+  {
+    name: 'Trải nghiệm Sauna và xông hơi khô',
+    description:
+      'Thư giãn tinh thần, đào thải độc tố cơ thể qua liệu pháp xông hơi sauna kết hợp đá muối hồng ngoại.',
+    priceLabel: 'Đã bao gồm trong thẻ Vàng hoặc 150.000 VND/lượt',
+    imageUrl: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15',
+    category: 'massage',
+    features: [
+      'Phòng sauna đá muối',
+      'Tắm tráng thảo dược',
+      'Khăn tắm và dép riêng',
+    ],
+    serviceDuration: 'Không giới hạn',
+    venueScope: 'Khu Sauna tầng 2',
+    isFeatured: false,
+    isActive: true,
+    sortOrder: 5,
+  },
+  {
+    name: 'Gói PT 1 kèm 1 - 12 Buổi',
+    description:
+      'Khóa huấn luyện cá nhân 1-1 tối ưu hình thể cùng huấn luyện viên chuyên nghiệp. Đo InBody định kỳ.',
+    basePrice: 7800000,
+    imageUrl: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b',
+    category: 'pt',
+    features: [
+      'HLV kèm sát 1-1 toàn thời gian',
+      'Thiết kế thực đơn dinh dưỡng riêng',
+      'Đo chỉ số InBody 970 định kỳ',
+      'Thời hạn sử dụng 2 tháng',
+    ],
+    serviceDuration: '2 tháng',
+    venueScope: 'Toàn hệ thống',
+    isFeatured: false,
+    isActive: true,
+    sortOrder: 6,
+  },
+  {
+    name: 'Lớp học Dance Hip-hop cơ bản',
+    description:
+      'Lớp học nhảy Hip-hop sôi động dành cho người mới bắt đầu. Giải phóng cơ thể và làm quen với nhịp điệu.',
+    basePrice: 1000000,
+    imageUrl: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad',
+    category: 'dance',
+    features: [
+      'Phòng nhảy sàn gỗ cao cấp',
+      'Hệ thống âm thanh ánh sáng hiện đại',
+      'Giáo án cập nhật liên tục',
+    ],
+    maxGuests: 20,
+    classDays: ['Thứ 2', 'Thứ 6'],
+    classTime: '18:00 - 19:30',
+    instructor: 'HLV Emma Carter',
+    classroom: 'Phòng Studio 2',
+    isFeatured: false,
+    isActive: true,
+    sortOrder: 7,
+  },
+  {
+    name: 'Lớp học Dance Kids năng động',
+    description:
+      'Lớp nhảy hiện đại vui nhộn phát triển thể chất và sự tự tin dành riêng cho trẻ em từ 6-12 tuổi.',
+    basePrice: 800000,
+    imageUrl: 'https://images.unsplash.com/photo-1518834107812-67b0b7c58434',
+    category: 'dance_kid',
+    features: [
+      'Môi trường vui tươi, an toàn',
+      'Giáo viên kiên nhẫn, chuyên nghiệp',
+      'Rèn luyện thể chất toàn diện cho bé',
+    ],
+    maxGuests: 15,
+    classDays: ['Thứ 7', 'Chủ nhật'],
+    classTime: '09:00 - 10:30',
+    instructor: 'HLV Sophia Bennett',
+    classroom: 'Phòng Group X',
+    isFeatured: false,
+    isActive: true,
+    sortOrder: 8,
+  },
+];

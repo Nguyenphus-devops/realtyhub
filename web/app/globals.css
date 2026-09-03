@@ -1,0 +1,599 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+/* Man hinh cam tay khong co trang thai hover, nen moi thu chi hien khi hover
+   se khong bao gio xuat hien o do. Dat lop du phong sau bien the nay de tren
+   dien thoai no hien san. */
+@custom-variant no-hover (@media (hover: none));
+
+@theme {
+  --font-*: initial;
+  
+  --font-sans: var(--font-open-sans), "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
+
+  --breakpoint-*: initial;
+  --breakpoint-2xsm: 375px;
+  --breakpoint-xsm: 425px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* Thang chu - dong bo voi admin */
+  --text-theme-xs: 12px;
+  --text-theme-xs--line-height: 18px;
+  --text-theme-sm: 14px;
+  --text-theme-sm--line-height: 20px;
+  --text-theme-xl: 20px;
+  --text-theme-xl--line-height: 30px;
+
+  /* Mau thuong hieu - xanh duong */
+  --color-brand-25: #f3f9ff;
+  --color-brand-50: #e8f3ff;
+  --color-brand-100: #cfe6ff;
+  --color-brand-200: #a5cfff;
+  --color-brand-300: #6fb0fb;
+  --color-brand-400: #3a90f2;
+  --color-brand-500: #0f6fd1;
+  --color-brand-600: #0b58a8;
+  --color-brand-700: #0a4785;
+  --color-brand-800: #0b3a6b;
+  --color-brand-900: #0e2f56;
+
+  /* Navy - footer, panel header */
+  --color-navy-500: #17417d;
+  --color-navy-600: #123566;
+  --color-navy-700: #0e2a52;
+  --color-navy-800: #0b2143;
+  --color-navy-900: #081832;
+
+  /* Cam - nhan du an thap tang, nhan tin tuc */
+  --color-accent-50: #fff6ec;
+  --color-accent-100: #ffe8cf;
+  --color-accent-400: #fb9d3a;
+  --color-accent-500: #f0871a;
+  --color-accent-600: #d16d0c;
+
+  /* Xanh ngoc - cac panel noi dung tren trang chi tiet du an */
+  --color-jade-50: #eafaf4;
+  --color-jade-300: #4fc4a3;
+  --color-jade-400: #2ba98c;
+  --color-jade-500: #12866f;
+  --color-jade-600: #0e6d5a;
+  --color-jade-700: #0b5546;
+  --color-jade-800: #084237;
+
+  /* Vang kim - tieu de va nut trong panel xanh, tab dang chon */
+  --color-gold-200: #f7e6b4;
+  --color-gold-300: #f2d98a;
+  --color-gold-400: #e8c25c;
+  --color-gold-500: #d4a32c;
+
+  --color-gray-25: #fcfcfd;
+  --color-gray-50: #f7f8fa;
+  --color-gray-100: #f2f4f7;
+  --color-gray-200: #e4e7ec;
+  --color-gray-300: #d0d5dd;
+  --color-gray-400: #98a2b3;
+  --color-gray-500: #667085;
+  --color-gray-600: #475467;
+  --color-gray-700: #344054;
+  --color-gray-800: #1d2939;
+  --color-gray-900: #101828;
+
+  --color-success-50: #ecfdf3;
+  --color-success-500: #12b76a;
+  --color-success-600: #039855;
+  --color-error-50: #fef3f2;
+  --color-error-500: #f04438;
+  --color-error-600: #d92d20;
+
+  --shadow-card: 0px 1px 3px 0px rgba(16, 24, 40, 0.08), 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+  --shadow-card-hover: 0px 12px 24px -6px rgba(16, 24, 40, 0.14), 0px 4px 8px -2px rgba(16, 24, 40, 0.06);
+  --shadow-panel: 0px 4px 16px -4px rgba(16, 24, 40, 0.1);
+  --shadow-focus-ring: 0px 0px 0px 4px rgba(15, 111, 209, 0.14);
+
+  /* Nay len roi lun ve - phan hoi cho cu cham vao nut yeu thich */
+  --animate-heart-pop: heart-pop 0.35s ease-out;
+
+  @keyframes heart-pop {
+    0% {
+      transform: scale(1);
+    }
+    45% {
+      transform: scale(1.35);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  /* ── Tro ly ao ────────────────────────────────────────────────────────── */
+
+  /* Vong sang lan toa ra roi tan - nhip "cho nhay" cua nut chat */
+  --animate-chat-halo: chat-halo 2.4s ease-out infinite;
+
+  @keyframes chat-halo {
+    0% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    70% {
+      transform: scale(1.75);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1.75);
+      opacity: 0;
+    }
+  }
+
+  /* Robot noi len ha xuong cho co ve song dong */
+  --animate-chat-bob: chat-bob 3s ease-in-out infinite;
+
+  @keyframes chat-bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+
+  /* Huy hieu so tin nhan chua doc */
+  --animate-chat-blink: chat-blink 1.6s ease-in-out infinite;
+
+  @keyframes chat-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  /* Khung chat bung ra tu goc duoi phai */
+  --animate-chat-in: chat-in 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+
+  @keyframes chat-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Bong bong tin nhan moi truot len */
+  --animate-message-in: message-in 0.22s ease-out;
+
+  @keyframes message-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Ba cham "dang go" - moi cham lech pha nhau bang animation-delay */
+  --animate-typing-dot: typing-dot 1.3s ease-in-out infinite;
+
+  @keyframes typing-dot {
+    0%,
+    60%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.35;
+    }
+    30% {
+      transform: translateY(-4px);
+      opacity: 1;
+    }
+  }
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  --animate-slow-zoom: slow-zoom 24s ease-out both;
+
+  @keyframes slow-zoom {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.12);
+    }
+  }
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-gray-50 font-sans text-gray-800 antialiased;
+  }
+
+  
+  html:has(.fullscreen-page) {
+    overflow: hidden;
+  }
+}
+
+/* Hien dan khi cuon toi. Chi bat o trinh duyet ho tro scroll-driven animation
+   va khi nguoi dung khong tat hieu ung - noi khac phan tu hien binh thuong. */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+  }
+}
+
+/* Vung noi dung chinh - dung chung cho header, main, footer */
+@utility site-container {
+  @apply mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-8;
+}
+
+/* Nen chuyen mau thuong hieu: nhan "du an cao tang" tren the du an va nut
+   tim kiem deu dung cai nay. De o day de hai cho khong bao gio lech mau. */
+@utility brand-gradient {
+  @apply bg-linear-to-r from-navy-800 via-navy-600 to-brand-500;
+}
+
+/* Nut keo cua thanh truot trong bang loc. Duong ray duoc ve bang div rieng
+   ben duoi nen ban than input trong suot. */
+@utility range-thumb {
+  appearance: none;
+  background: transparent;
+
+  &::-webkit-slider-thumb {
+    pointer-events: auto;
+    appearance: none;
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: 9999px;
+    border: 2px solid var(--color-brand-500);
+    background: #fff;
+    box-shadow: var(--shadow-card);
+    cursor: grab;
+  }
+
+  &::-moz-range-thumb {
+    pointer-events: auto;
+    height: 1.25rem;
+    width: 1.25rem;
+    border-radius: 9999px;
+    border: 2px solid var(--color-brand-500);
+    background: #fff;
+    box-shadow: var(--shadow-card);
+    cursor: grab;
+  }
+
+  &:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--color-brand-300);
+    outline-offset: 2px;
+  }
+}
+
+/* Cuon ngang duoc nhung khong hien thanh cuon - dung cho thanh tab */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Thanh thong bao chay ngang: dich toan bo noi dung tu 0 den -50% (do
+   items[] da nhan doi nen phan B ghep lien phan A). Hover vao parent
+   `.group` se dung lai (animation-play-state: paused). */
+@utility marquee-track {
+  animation: marquee var(--marquee-duration, 50s) linear infinite;
+  will-change: transform;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+/* ── Pin gia tren ban do mat bang (Leaflet divIcon) ──────────────────────
+   Leaflet dung HTML tho cho icon nen khong ap dung duoc class Tailwind sinh
+   theo nhu cau; cac lop nay phai la CSS that.
+
+   Cung mot rang buoc voi .map-pin ben duoi: Leaflet ghi
+   `transform: translate3d(...)` INLINE len the ghim de dinh vi, ma inline de
+   len stylesheet - nen the ghim chi con la diem neo 0x0 nam dung toa do, con o
+   gia la mot <span> ben trong. Nho vay o gia tu co dan theo do dai tung muc
+   gia (khong con khung 44px cung), va hieu ung phong to khi ro chuot moi co
+   cho de song. */
+.plan-pin {
+  --pin: var(--color-jade-500);
+  width: 0;
+  height: 0;
+}
+
+/* O gia: rong theo noi dung, dat ngay tren toa do va chua 5px cho mui nhon.
+   Bo goc vua phai thay vi vien vien - gia cang ngan thi vien vien cang tron
+   xoe ra, nhin to hon thuc te. */
+.plan-pin > span {
+  position: absolute;
+  left: 0;
+  bottom: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 6px;
+  border-radius: 6px;
+  background: var(--pin);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgb(16 24 40 / 0.35);
+  /* Phong to lay mui nhon lam goc, de dau ghim khong roi khoi can nha */
+  transform: translateX(-50%);
+  transform-origin: 50% 100%;
+  transition: transform 0.15s ease;
+}
+
+.plan-pin > span::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  margin-left: -4px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--pin);
+}
+
+/* O gia chong len nhau day dac: cai dang ro chuot phai noi len tren, neu khong
+   phong to ra cung van bi o khac che mat. Leaflet ghi z-index theo vi do
+   thanh style INLINE tren tung ghim, nen day la cho bat buoc phai !important
+   moi de duoc len. */
+.plan-pin:hover {
+  z-index: 500 !important;
+}
+
+.plan-pin:hover > span {
+  transform: translateX(-50%) scale(1.12);
+}
+
+/* Tat gia: con lai cham tron nam DUNG TAM toa do, nen phai bo mui nhon di -
+   neu khong dau ghim se tro xuong duoi vi tri that khoang 10px. */
+.plan-pin--dot > span {
+  width: 13px;
+  height: 13px;
+  padding: 0;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  top: 0;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  transform-origin: 50% 50%;
+}
+
+.plan-pin--dot > span::after {
+  content: none;
+}
+
+.plan-pin--dot:hover > span {
+  transform: translate(-50%, -50%) scale(1.3);
+}
+
+.plan-pin--doc-quyen {
+  --pin: var(--color-error-600);
+}
+
+.plan-pin--an-cheo {
+  --pin: #b45309;
+}
+
+.plan-pin--thuong {
+  --pin: var(--color-success-500);
+}
+
+/* Toan man hinh: khung ngoai duoc trinh duyet keo kin man hinh, nhung khung
+   ban do ben trong van giu chieu cao co dinh cua Tailwind (h-140/sm:h-170) nen
+   ban do chi nam gon phan tren, con lai la nen xam. Phai tra chieu cao ve 100%
+   thi invalidateSize() moi co gi de do lai. */
+.plan-map-shell:fullscreen {
+  border-radius: 0;
+  border-width: 0;
+}
+
+.plan-map-shell:fullscreen .plan-map-canvas {
+  height: 100%;
+}
+
+/* ── Ghim du an tren ban do khu vuc (Leaflet divIcon) ────────────────────
+   Leaflet ghi `transform: translate3d(...)` INLINE len the ghim de dinh vi no.
+   Inline de len stylesheet, nen moi transform cua ta (phong to khi ro chuot,
+   keo ve giua) deu phai dat tren <span> BEN TRONG. Ban than the ghim chi con
+   la mot diem neo 0x0 nam dung toa do - nho vay o chu co dan theo do dai chu
+   ma van luon can giua ghim, khong can tinh iconAnchor. */
+.map-pin {
+  --pin-bg: var(--color-error-600);
+  width: 0;
+  height: 0;
+}
+
+.map-pin > span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--pin-bg);
+  box-shadow: 0 1px 3px rgb(16 24 40 / 0.4);
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease;
+}
+
+/* Ghim chong len nhau khi cac du an nam sat: cai dang ro chuot phai noi len
+   tren, neu khong doc duoc chu. Leaflet gan z-index theo vi do nen phai dat
+   cao han hon. */
+.map-pin:hover {
+  z-index: 500;
+}
+
+.map-pin:hover > span {
+  transform: translate(-50%, -50%) scale(1.3);
+}
+
+/* O chu (gia, dien tich, nam ban giao...) - co dan theo do dai chu.
+   Bo goc vua phai thay vi vien vien: o cang ngan thi vien vien cang tron xoe
+   ra, nhin to hon thuc te. */
+.map-pin--label > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  padding: 2px 5px;
+  border-width: 1px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.map-pin--label:hover > span {
+  transform: translate(-50%, -50%) scale(1.18);
+}
+
+/* Ghim cua du an da luu */
+.map-pin--favorite {
+  --pin-bg: var(--color-accent-500);
+}
+
+/* Bang mau khi ghim duoc to theo loai hinh / trang thai - dat sau --favorite
+   de che do to mau giu dung bang chu thich */
+.map-pin--c1 { --pin-bg: var(--color-brand-500); }
+.map-pin--c2 { --pin-bg: var(--color-accent-500); }
+.map-pin--c3 { --pin-bg: var(--color-jade-500); }
+.map-pin--c4 { --pin-bg: var(--color-error-600); }
+.map-pin--c5 { --pin-bg: var(--color-navy-600); }
+
+/* Ghim cua du an dang tro toi - luon thang moi mau khac */
+.map-pin--active {
+  --pin-bg: var(--color-brand-500);
+  z-index: 600;
+}
+
+.map-pin--active > span {
+  transform: translate(-50%, -50%) scale(1.5);
+  box-shadow: 0 0 0 4px rgb(15 111 209 / 0.25);
+}
+
+.map-pin--label.map-pin--active > span {
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+/* ── Chu thich tren anh 360 (Pannellum) ─────────────────────────────────
+   Pannellum ve hotspot bang DOM tho, khong ap duoc class Tailwind sinh theo
+   nhu cau nen cac lop nay phai la CSS that - giong .plan-pin ben duoi. */
+.pano-hotspot {
+  height: 14px;
+  width: 14px;
+  border-radius: 9999px;
+  border: 2px solid #fff;
+  background: var(--color-jade-500);
+  box-shadow: 0 2px 8px rgb(16 24 40 / 0.45);
+  cursor: pointer;
+}
+
+.pano-hotspot:hover {
+  background: var(--color-gold-400);
+}
+
+/* Popup cua Leaflet mac dinh bo goc 12px va font rieng - keo ve dung he thong */
+.leaflet-container {
+  font-family: inherit;
+  background: var(--color-gray-100);
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+}
+
+
+/* ── Trang "Tro thanh moi gioi" ───────────────────────────────────────────── */
+
+/* Bang mau rieng cua man hinh onboarding, do lai tu giao dien goc: xanh dam
+   hon va vien xam trung tinh hon he mau chung cua site. Khai bao o day thay vi
+   trong @theme de no chi song trong pham vi .agent-onboarding - phan con lai
+   cua web khong bi keo mau theo. */
+.agent-onboarding {
+  --ob-blue: #094cf6;
+  --ob-blue-strong: #0641d4;
+  --ob-blue-ink: #02206d;
+  --ob-blue-soft: #eef3ff;
+  --ob-surface: #f5f5f5;
+  --ob-border: #dedede;
+  --ob-border-soft: #ebebeb;
+  --ob-ink: #101010;
+  --ob-muted: #707070;
+  --ob-disabled-ink: #a3a3a3;
+}

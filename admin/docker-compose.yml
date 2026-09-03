@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  admin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: al_demo_dongtayland_click:admin
+    container_name: al_demo_dongtayland_click_admin
+    ports:
+      - "8828:8828"
+    env_file:
+      - .env
+    restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8828/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M

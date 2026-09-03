@@ -1,0 +1,75 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "$comment": [
+    "Repo nay la san pham tieng Viet: comment viet tieng Viet KHONG DAU (quy uoc",
+    "san co), con chuoi hien thi va du lieu mau thi tieng Viet CO DAU.",
+    "Trinh kiem tra chinh ta tieng Anh doc chung thanh tu sai va sinh ra hang tram",
+    "canh bao gia trong tab PROBLEMS, lam lap mat loi that.",
+    "",
+    "Cach xu ly: bo qua dung ba vung chac chan la tieng Viet, giu nguyen kiem tra",
+    "chinh ta cho ten bien, ten ham va chuoi tieng Anh - noi loi go that dang duoc bat.",
+    "",
+    "  1. Comment       - toan bo phan dien giai bang tieng Viet khong dau",
+    "  2. Chuoi co dau  - chuoi chua ky tu co dau phu (U+00C0-U+1EF9) chac chan la",
+    "                     tieng Viet, vd 'Đóng khung chat'. Bo qua ca chuoi, vi",
+    "                     trong do co ca am tiet vo tinh khong dau (khung, trang).",
+    "  3. Slug kebab    - gia tri enum tieng Viet dang 'phan-khu', 'mac-dinh',",
+    "                     'dang-mo-ban'. Chi khop chuoi toan chu thuong co dau noi."
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    "**/node_modules/**",
+    ".next/**",
+    "**/.next/**",
+    "dist/**",
+    "**/dist/**",
+    "graft/**",
+    "**/package-lock.json",
+    "**/*.min.js"
+  ],
+  "patterns": [
+    {
+      "name": "LineComment",
+      "pattern": "/\\/\\/[^\\n]*/g"
+    },
+    {
+      "name": "BlockComment",
+      "pattern": "/\\/\\*[\\s\\S]*?\\*\\//g"
+    },
+    {
+      "name": "VietnameseString",
+      "pattern": "/(['\"`])[^'\"`\\n]*[\\u00C0-\\u1EF9][^'\"`\\n]*\\1/g"
+    },
+    {
+      "name": "KebabSlug",
+      "pattern": "/(['\"`])[a-z0-9]+(-[a-z0-9]+)+\\1/g"
+    }
+  ],
+  "ignoreRegExpList": [
+    "LineComment",
+    "BlockComment",
+    "VietnameseString",
+    "KebabSlug"
+  ],
+  "words": [
+    "Saleplust",
+    "leaflet",
+    "TanStack",
+    "tailwindcss",
+    "nestjs",
+    "typeorm",
+    "Bitdefender",
+    "dvh",
+    "xsm",
+    "woff",
+
+    "anh",
+    "ngay",
+    "nhieu",
+    "phan",
+    "theo",
+    "trang",
+    "trong"
+  ]
+}

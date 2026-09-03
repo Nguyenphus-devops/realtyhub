@@ -1,0 +1,15 @@
+/node_modules
+/.next/
+/out/
+/build
+next-env.d.ts
+*.tsbuildinfo
+
+# env files - chi commit file mau
+.env*
+!.env.example
+
+.DS_Store
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+graft/
