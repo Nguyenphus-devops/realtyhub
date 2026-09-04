@@ -16,7 +16,7 @@ export const PROJECT_DETAIL_TABS = [
   { key: 'tong-quan', label: 'Tổng quan' },
   { key: 'vi-tri', label: 'Vị trí' },
   { key: 'phan-khu', label: 'Phân khu' },
-  { key: 'mat-bang-quy-can', label: 'Mặt bằng quỹ căn' },
+  { key: 'mat-bang-quy-can', label: 'Vị trí quỹ căn' },
   { key: 'quy-can', label: 'Quỹ căn' },
   { key: 'anh-360', label: 'Ảnh 360°' },
   { key: 'dao-tao', label: 'Đào tạo' },
@@ -154,7 +154,7 @@ export type PhaseSummary = {
 export const PHASE_DETAIL_TABS = [
   { key: 'tong-quan', label: 'Tổng quan' },
   { key: 'vi-tri', label: 'Vị trí' },
-  { key: 'mat-bang-quy-can', label: 'Mặt bằng quỹ căn' },
+  { key: 'mat-bang-quy-can', label: 'Vị trí quỹ căn' },
   { key: 'quy-can', label: 'Quỹ căn' },
   { key: 'chinh-sach-ban-hang', label: 'Chính sách bán hàng' },
 ] as const;
@@ -191,9 +191,9 @@ export type PhaseDetail = {
 export type UnitFundType = 'doc-quyen' | 'an-cheo' | 'thuong';
 
 export const UNIT_FUND_LABELS: Record<UnitFundType, string> = {
-  'doc-quyen': 'Quỹ Độc quyền',
-  'an-cheo': 'Quỹ Ẩn + Chéo',
-  thuong: 'Quỹ thưởng',
+  'doc-quyen': 'Quỹ Hàng HOT',
+  'an-cheo': 'Quỹ Hàng Chung',
+  thuong: 'Quỹ Hàng Ẩn',
 };
 
 /** Mot pin gia gan tren anh mat bang */

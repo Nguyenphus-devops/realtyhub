@@ -29,13 +29,13 @@ const HomePage = ({ initialContent }: HomePageProps) => {
       <div className="bg-white pb-8 pt-16 md:pt-24">
         <QuickUtilities />
       </div>
+      <FeaturedProjects projects={content.featuredProjects} />
       <div className="bg-white">
         <div className="site-container">
           <NewsSpotlight />
         </div>
       </div>
       <TestimonialsSection testimonials={content.testimonials} />
-      <FeaturedProjects projects={content.featuredProjects} />
       <WhyUs features={content.features} />
       </div>
     </>

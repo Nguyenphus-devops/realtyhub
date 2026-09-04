@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { HiOutlineUserGroup } from 'react-icons/hi2';
+import { HiMiniHome } from 'react-icons/hi2';
 import { FaFacebookF, FaTiktok, FaYoutube } from 'react-icons/fa';
 import { SiZalo } from 'react-icons/si';
 import AppStoreBadges from '@/common/components/AppStoreBadges';
@@ -36,9 +37,22 @@ const POPULAR_SEARCHES = [
 ];
 
 const ABOUT_LINKS = [
+  { label: 'Trang chủ', href: '/' },
   { label: 'Giới thiệu', href: '/gioi-thieu' },
   { label: 'Điều khoản sử dụng', href: '/dieu-khoan-su-dung' },
   { label: 'Chính sách bảo mật', href: '/chinh-sach-bao-mat' },
+  { label: 'Liên hệ', href: '/lien-he-chung-toi' },
+];
+
+/** Thanh dieu huong nganh tren cung footer - to nen dam hon de tach khoi cac
+    cot ben duoi, hien thi nhanh cac lien ket chinh dang quan tam. */
+const QUICK_LINKS = [
+  { label: 'Trang chủ', href: '/', highlight: true },
+  { label: 'Giới thiệu', href: '/gioi-thieu' },
+  { label: 'Dự án', href: '/du-an' },
+  { label: 'Tin tức', href: '/tin-tuc' },
+  { label: 'Sự kiện', href: '/su-kien' },
+  { label: 'So sánh dự án', href: '/so-sanh' },
   { label: 'Liên hệ', href: '/lien-he-chung-toi' },
 ];
 
@@ -193,6 +207,38 @@ const SiteFooter = () => (
           ))}
         </ul>
       </section>
+    </div>
+
+    {/* ── Thanh lien ket nhanh (nganh tren cung footer) ────────────────
+        Dat thanh ngang rieng de “Trang chủ” noi bat len tren tat ca cac
+        cot ben duoi; dung thanh ngang chu khong lam cot de giu dung ti le
+        12-cot o luoi chinh. */}
+    <div className="site-container">
+      <nav
+        aria-label="Liên kết nhanh"
+        className="flex flex-wrap items-center gap-x-6 gap-y-3 rounded-2xl bg-navy-800 px-5 py-4 text-theme-sm text-white md:px-7"
+      >
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 font-bold text-brand-500 transition hover:text-brand-400"
+        >
+          <HiMiniHome aria-hidden className="text-base" />
+          Trang chủ
+        </Link>
+        <span aria-hidden className="hidden h-4 w-px bg-white/20 md:block" />
+        <ul className="flex flex-1 flex-wrap items-center gap-x-6 gap-y-2">
+          {QUICK_LINKS.filter((link) => !link.highlight).map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className="text-white/85 transition hover:text-brand-400"
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
 
     {/* ── Cac cot lien ket ──────────────────────────────────────────────

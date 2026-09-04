@@ -11,11 +11,11 @@ import FavoriteButton from '@/common/layout/FavoriteButton';
 
 const NAV_ITEMS = [
   { label: 'Giới thiệu', href: '/gioi-thieu' },
-  { label: 'giỏ hàng', href: '/gio-hang' },
-  { label: 'Đào tạo', href: '/dao-tao' },
+  { label: 'Dự án', href: '/du-an' },
+  { label: 'Sự kiện', href: '/su-kien' },
   { label: 'Tiện ích', href: '/tien-ich' },
-  { label: 'Tin tức', href: '/tin-tuc' },
-    { label: 'Sự kiện', href: '/su-kien' },
+  
+  //{ label: 'Trở thành môi giới', href: '/tro-thanh-moi-gioi' },
 ];
 
 /** Nhom "Khac" hien thi dropdown o desktop. 3 muc con nay cu cung duoc
@@ -23,9 +23,12 @@ const NAV_ITEMS = [
 const MORE_MENU = {
   label: 'mục Khác',
   children: [
-    { label: 'Trở thành môi giới', href: '/tro-thanh-moi-gioi' },
-    { label: 'So sánh dự án & căn hộ', href: '/so-sanh' },
-    { label: 'So sánh chính sách', href: '/so-sanh-chinh-sach' },
+    
+    //{ label: 'So sánh dự án & căn hộ', href: '/so-sanh' },
+    { label: 'Tin tức', href: '/tin-tuc' },
+    { label: 'Đào tạo', href: '/dao-tao' },
+    
+    //{ label: 'So sánh chính sách', href: '/so-sanh-chinh-sach' },
     { label: 'Liên hệ chúng tôi', href: '/lien-he-chung-toi' },
     { label: 'Góp ý & phản hồi', href: '/gop-y-va-phan-hoi' },
     { label: 'Hướng dẫn sử dụng', href: '/huong-dan' },

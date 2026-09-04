@@ -245,7 +245,7 @@ const FloorPlanTab = ({ planMap, lockedPhaseName }: FloorPlanTabProps) => {
     <div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-xl font-bold uppercase tracking-wide text-gray-900">
-          Mặt bằng quỹ căn
+          Vị trí quỹ căn
         </h2>
 
         <button
