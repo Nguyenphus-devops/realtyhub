@@ -3,6 +3,7 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { ProjectService } from '../services/project.service';
 import type {
+  AllUnitsQuery,
   PhaseDetail,
   ProjectDetail,
   UnitQuery,
@@ -67,5 +68,18 @@ export const useProjectUnits = (slug: string, query: UnitQuery) =>
     queryKey: ['project-units', slug, query] as const,
     queryFn: () => ProjectService.units(slug, query),
     // Giu bang hang cu khi doi trang/loc de bang khong nhay ve rong
+    placeholderData: keepPreviousData,
+  });
+
+/**
+ * Quy can tong hop - trang /quy-can.
+ *
+ * Co cung placeholderData de khi user doi trang hoac sua filter thi du lieu
+ * cuu giu nguyen, tranh hien thi skeleton trong khoang 250ms gia lap.
+ */
+export const useAllUnits = (query: AllUnitsQuery) =>
+  useQuery({
+    queryKey: ['all-units', query] as const,
+    queryFn: () => ProjectService.allUnits(query),
     placeholderData: keepPreviousData,
   });

@@ -110,9 +110,11 @@ const HeroSearch = ({ slides }: HeroSearchProps) => {
       <div className="site-container pb-20 md:pb-28 lg:pb-32">
         <div className="mx-auto max-w-3xl text-center text-white">
           <h1 className="text-3xl font-extrabold uppercase leading-tight tracking-wide [text-shadow:_0_2px_8px_rgba(0,0,0,0.6)] md:text-4xl lg:text-5xl">
-            {firstBanner?.headline}
+            <span>#1 NỀN TẢNG DÀNH CHO</span>
+            <br className="hidden md:inline" />
+            <span className="md:block"> NHÀ MÔI GIỚI BẤT ĐỘNG SẢN</span>
           </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-theme-sm leading-relaxed [text-shadow:_0_1px_4px_rgba(0,0,0,0.5)] md:text-base">
+          <p className="mx-auto mt-4 max-w-2xl text-base italic font-medium leading-relaxed [text-shadow:_0_1px_4px_rgba(0,0,0,0.5)] md:text-lg lg:text-xl">
             {firstBanner?.subtitle}
           </p>
         </div>

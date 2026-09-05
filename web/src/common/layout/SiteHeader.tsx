@@ -9,12 +9,25 @@ import { FaRegHeart } from 'react-icons/fa';
 import AccountMenu from '@/common/components/AccountMenu';
 import FavoriteButton from '@/common/layout/FavoriteButton';
 
+// Route dung chung cho trang "DANH SÁCH DỰ ÁN". Cả nav "DỰ ÁN" lẫn logo
+// "REALTY HUB" deu phai tro ve day de khong tao them route moi va tranh
+// duplicate content. Khi doi URL trang danh sach du an, chi can doi
+// hang so nay.
+const DỰ_ÁN_HREF = '/gio-hang';
+
 const NAV_ITEMS = [
-  { label: 'Giới thiệu', href: '/gioi-thieu' },
-  { label: 'Dự án', href: '/du-an' },
+  { label: 'Trang chủ', href: '/' },
+  // Chu dau tu: trang tong hop cac chu dau tu + so du an/cua moi nguoi.
+  // Dat ngay TRUOC "Dự án" theo yeu cau nav: nguoi dung nhan dien du an
+  // qua chu dau tu nen di tu CDT -> DA la chieu doc tu nhien.
+  { label: 'Chủ đầu tư', href: '/chu-dau-tu' },
+  { label: 'Dự án', href: DỰ_ÁN_HREF, aliases: ['/du-an'] },
+  // Quy can: tong hop toan bo can/san pham cua tat ca du an. Dat ngay
+  // sau "Dự án" de nguoi dung tim can nhanh hon qua tung du an rieng le.
+  { label: 'Quỹ căn', href: '/quy-can' },
   { label: 'Sự kiện', href: '/su-kien' },
   { label: 'Tiện ích', href: '/tien-ich' },
-  
+
   //{ label: 'Trở thành môi giới', href: '/tro-thanh-moi-gioi' },
 ];
 
@@ -23,11 +36,15 @@ const NAV_ITEMS = [
 const MORE_MENU = {
   label: 'mục Khác',
   children: [
-    
+    // Trang gioi thieu da duoc chuyen tu menu chinh xuong day de nhuong
+    // cho "Chu dau tu" va "Quy can". Giu nguyen route /gioi-thieu va
+    // chuc nang (trang gioi thieu ve RealtyHub).
+    { label: 'Giới thiệu', href: '/gioi-thieu' },
+
     //{ label: 'So sánh dự án & căn hộ', href: '/so-sanh' },
     { label: 'Tin tức', href: '/tin-tuc' },
     { label: 'Đào tạo', href: '/dao-tao' },
-    
+
     //{ label: 'So sánh chính sách', href: '/so-sanh-chinh-sach' },
     { label: 'Liên hệ chúng tôi', href: '/lien-he-chung-toi' },
     { label: 'Góp ý & phản hồi', href: '/gop-y-va-phan-hoi' },
@@ -36,7 +53,10 @@ const MORE_MENU = {
 };
 
 const BrandMark = () => (
-  <Link href="/" className="flex items-center" aria-label="Trang chủ">
+  // Logo dung chung route voi menu "DỰ ÁN" (NAV_ITEMS o tren) de dam bao
+  // click logo cung vao dung trang danh sach du an, khong tao them route
+  // moi. Khi doi href cua nav DỰ ÁN can cap nhat lai o day.
+  <Link href={DỰ_ÁN_HREF} className="flex items-center" aria-label="Dự án">
     <Image
       src="/images/home/realtyhub_new.svg"
       alt="RealtyHub"
@@ -95,7 +115,18 @@ const SiteHeader = () => {
 
   const moreRef = useRef<HTMLLIElement>(null);
 
-  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+  const isActive = (href: string) => {
+    // Route goc ("/") phai so sanh chinh xac - moi path deu bat dau bang "/"
+    // nen neu dung startsWith mac dinh se active o moi trang.
+    if (href === '/') return pathname === '/';
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+  // Nav item co the co nhieu alias (vd "/gio-hang" va "/du-an" cung tro ve
+  // cung trang "Danh sach du an") - active neu bat ky alias nao match.
+  const isNavItemActive = (item: { href: string; aliases?: string[] }) => {
+    if (isActive(item.href)) return true;
+    return item.aliases?.some((alias) => isActive(alias)) ?? false;
+  };
   const isMoreActive = MORE_MENU.children.some((c) => isActive(c.href));
 
   // Trang chu: header trong suot de banner noi bat; cuon xuong thi chuyen
@@ -212,9 +243,9 @@ const SiteHeader = () => {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
+                  aria-current={isNavItemActive(item) ? 'page' : undefined}
                   className={`text-theme-sm font-semibold uppercase tracking-wide transition ${
-                    isActive(item.href) ? navColor.active : navColor.idle
+                    isNavItemActive(item) ? navColor.active : navColor.idle
                   }`}
                 >
                   {item.label}
@@ -366,9 +397,9 @@ const SiteHeader = () => {
                   <Link
                     href={item.href}
                     onClick={() => setIsMobileOpen(false)}
-                    aria-current={isActive(item.href) ? 'page' : undefined}
+                    aria-current={isNavItemActive(item) ? 'page' : undefined}
                     className={`block px-5 py-4 text-base font-medium capitalize transition hover:bg-gray-50 ${
-                      isActive(item.href) ? 'text-brand-600' : 'text-gray-800'
+                      isNavItemActive(item) ? 'text-brand-600' : 'text-gray-800'
                     }`}
                   >
                     {item.label}
