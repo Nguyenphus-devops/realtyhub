@@ -1,0 +1,58 @@
+on:
+  pull_request:
+    branches: [ main ] # Hoặc branch mặc định của bạn
+    types: [ opened, synchronize, reopened ]
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Sử dụng node 20+ như yêu cầu
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create .env file
+        run: |
+          echo "NEXT_PUBLIC_ADMIN_APP_DOMAIN=http://localhost:3000" > .env
+          echo "NEXT_PUBLIC_DOMAIN=http://localhost:3000" >> .env
+    
+      - name: Check Linting
+        run: npm run lint --if-present
+
+      - name: Build Project
+        run: npm run build
+
+  deploy:
+    needs: verify
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: main
+    steps:
+      - name: Deploy 
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME_NFC }}
+          password: ${{ secrets.VPS_PASSWORD_NFC }}
+          port: 22
+          script: |
+            # 1. Đi vào thư mục gốc của dự án
+            cd /home/nfc/nfc_marketing
+
+            # 2. Cập nhật code mới nhất từ nhánh main
+            git fetch --all
+            git reset --hard origin/main
+
+            # 3. Build lại và chạy container
+            docker compose up -d --build
+            docker ps
