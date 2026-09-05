@@ -4,22 +4,22 @@
  *
  * Dung luon MOCK_PROJECTS tu module project de featured khong bi "lech" voi
  * trang /gio-hang (cung ten, cung dia chi, cung thumbnail).
+ *
+ * Ghi chu: MOCK_FEATURES + MOCK_TESTIMONIALS van duoc export vi 2 khoi
+ * nay duoc tai su dung trong trang /gioi-thieu (module About). Chung
+ * KHONG con tren trang chu.
  */
 import { MOCK_PROJECTS } from '@/modules/project/mocks/projects.mock';
-import type {
-  HomeBannerSlide,
-  HomeContent,
-  HomeFeature,
-  HomeTestimonial,
-} from '../models/home.model';
+import type { HomeBannerSlide, HomeContent } from '../models/home.model';
+import type { HomeFeature, HomeTestimonial } from '@/modules/about/models/about.model';
 
 /** Lay ra 6 du an noi bat theo isHot + moi dang mo ban */
 export const MOCK_BANNERS: HomeBannerSlide[] = [
   {
     publicId: 'banner-001',
-    headline: 'TÌM NGAY DỰ ÁN PHÙ HỢP VỚI KHÁCH HÀNG CỦA BẠN',
-    subtitle:
-      'Hơn 50+ dự án trên toàn quốc, đặc biệt tập trung nguồn hàng chất lượng tại thị trường miền Nam.',
+    headline: '#1 NỀN TẢNG DÀNH CHO NHÀ MÔI GIỚI BẤT ĐỘNG SẢN',
+    subheadline: 'CÔNG NGHỆ DÀNH RIÊNG CHO SALES – TÌM HÀNG NHANH, CHỐT DEAL TỐT',
+    subtitle: 'ĐỪNG ĐỂ KHÁCH HÀNG CỦA BẠN ĐI TÌM ĐỐI TÁC KHÁC',
     primaryCtaLabel: 'Khám phá dự án',
     secondaryCtaLabel: 'Đăng ký tư vấn',
     desktopImageUrl: '/images/home/banner/desktop/b1.jpg',
@@ -129,6 +129,17 @@ export const MOCK_TESTIMONIALS: HomeTestimonial[] = [
 export const MOCK_HOME_CONTENT: HomeContent = {
   banners: MOCK_BANNERS,
   featuredProjects: MOCK_FEATURED_PROJECTS,
-  features: MOCK_FEATURES,
-  testimonials: MOCK_TESTIMONIALS,
+  /**
+   * Seed rong - service se goi ProjectService.featuredUnits() de lay can that.
+   * De trong o day de mock file nay khong phu thuoc vao project-detail.mock
+   * (tranh circular import).
+   */
+  featuredUnits: [],
+  /**
+   * Seed rong - service se goi InvestorService.list() de lay 25 chu dau
+   * tu (dong bo voi trang /chu-dau-tu).
+   */
+  investors: [],
+  // features + testimonials da duoc di chuyen sang trang /gioi-thieu
+  // (module About). Trang chu khong su dung 2 khoi nay nua.
 };

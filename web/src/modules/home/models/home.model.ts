@@ -1,10 +1,29 @@
 /**
  * Hop dong voi backend - map sang module `banner` + `home-config` sau nay.
  *
- * Moi khoi tren trang chu (hero, vi-sao-chon...) deu la mot khoi noi dung
- * doc lap de admin co the bat/tat/tuy bien tu backend.
+ * Moi khoi tren trang chu (hero, cac-chu-dau-tu...) deu la mot khoi noi
+ * dung doc lap de admin co the bat/tat/tuy bien tu backend.
+ *
+ * Ghi chu lich su:
+ * - Khoi `features` (Vi sao chon chung toi / Dong hanh cung ban tu A den Z)
+ *   va `testimonials` (Khach hang noi gi / Duoc khach hang tin tuong va
+ *   lua chon) da duoc di chuyen sang trang /gioi-thieu ngay 05/09/2026
+ *   theo yeu cau cua product.
+ * - Hai khoi do gio chi xuat hien tren trang gioi thieu chinh thuc, KHONG
+ *   con tren trang chu, KHONG nam trong layout dung chung.
+ * - Trang gioi thieu su dung no noi tai module About
+ *   (src/modules/about/components), data lay tu about.mock.ts.
+ * - Type `HomeFeature` + `HomeTestimonial` van duoc re-export o day de
+ *   giu tuong thich nguoc voi cac component cu (WhyUs, TestimonialsSection).
+ *   Nguon that cua type la module About (about.model.ts).
  */
 
+import type { HomeFeature, HomeTestimonial } from '@/modules/about/models/about.model';
+
+export type { HomeFeature, HomeTestimonial };
+
+import type { InvestorSummary } from '@/modules/developer/models/investor.model';
+import type { UnitWithProject } from '@/modules/project/models/project-detail.model';
 import type { Project } from '@/modules/project/models/project.model';
 
 /** Mot slide banner o dau trang chu */
@@ -12,7 +31,12 @@ export type HomeBannerSlide = {
   publicId: string;
   /** Tieu de lon tren anh */
   headline: string;
-  /** Dong mo ta duoi tieu de */
+  /**
+   * Tieu de phu (in hoa, font nho hon) - vi tri ngay duoi `headline`.
+   * Tu chon: neu khong co thi fallback xuong `subtitle`.
+   */
+  subheadline?: string;
+  /** Dong mo ta duoi tieu de phu (neu co) hoac duoi tieu de chinh */
   subtitle: string;
   /** Chu tren nut bam chinh */
   primaryCtaLabel: string;
@@ -35,42 +59,16 @@ export type HomeBannerSlide = {
   mobileImageUrl?: string;
 };
 
-/** Mot muc trong khoi "Vi sao chon chung toi" */
-export type HomeFeature = {
-  publicId: string;
-  icon: 'shield' | 'search' | 'support' | 'chart';
-  title: string;
-  description: string;
-};
-
-/**
- * Mot danh gia tu khach hang / chuyen gia / nha dau tu hien o khoi
- * "Khach hang noi gi" tren trang chu.
- */
-export type HomeTestimonial = {
-  publicId: string;
-  /** Ten khach hang. VD: "Anh Nguyen Van A". */
-  authorName: string;
-  /** Chuc danh / vi tri. VD: "Khach hang mua can ho Vinhomes". */
-  authorRole: string;
-  /** URL avatar that. Neu khong co -> UserAvatar fallback initials. */
-  avatar?: string;
-  /** So sao 1-5 (rating). */
-  rating: 1 | 2 | 3 | 4 | 5;
-  /** Noi dung danh gia. 1-3 cau, can ngan gon. */
-  quote: string;
-  /** Ten du an / san pham lien quan (hien thi o footer card). */
-  relatedProject?: string;
-};
-
 /** Toan bo du lieu trang chu - server se goi mot lan roi truyen xuong client */
 export type HomeContent = {
   banners: HomeBannerSlide[];
   /** 6 du an noi bat hien o khoi chinh giua */
   featuredProjects: Project[];
-  features: HomeFeature[];
-  /** 3-6 danh gia hien o khoi testimonials. Neu rong -> khoi an. */
-  testimonials: HomeTestimonial[];
+  /** 12 can noi bat gop tu TAT CA du an (khong phai mot du an cu the) */
+  featuredUnits: UnitWithProject[];
+  /**
+   * 25 chu dau tu chinh thuc hien o section "CAC CHU DAU TU". Cung
+   * single source of truth voi trang /chu-dau-tu (InvestorService).
+   */
+  investors: InvestorSummary[];
 };
-
-export const FEATURE_ICONS = ['shield', 'search', 'support', 'chart'] as const;

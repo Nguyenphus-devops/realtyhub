@@ -16,6 +16,10 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "http", hostname: "localhost", pathname: "**" },
       { protocol: "http", hostname: "127.0.0.1", pathname: "**" },
+      // Logo chu dau tu chinh thuc tu domain realtyhub.com.vn.
+      // Whitelist de next/image optimizer hoat dong (dung de tu dong toi uu
+      // va cache logo nho).
+      { protocol: "https", hostname: "realtyhub.com.vn", pathname: "**" },
     ],
   },
 };

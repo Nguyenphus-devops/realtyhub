@@ -11,6 +11,7 @@
  * nen viec doi sang API that chi cham vao dung file nay.
  */
 import {
+  getAllUnitsAcrossProjects,
   getPhaseDetail,
   getProjectDetail,
   getProjectUnits,
@@ -21,11 +22,14 @@ import {
   MOCK_REGIONS,
 } from '../mocks/projects.mock';
 import type {
+  AllUnitsQuery,
+  PaginatedAllUnits,
   PaginatedUnits,
   PhaseDetail,
   ProjectDetail,
   ProjectUnit,
   UnitQuery,
+  UnitWithProject,
 } from '../models/project-detail.model';
 import {
   AMENITY_TAG_LABELS,
@@ -290,5 +294,201 @@ export const ProjectService = {
       limit: query.limit,
       facets,
     });
+  },
+
+  /**
+   * Quy can tong hop - toan bo can/san pham cua TAT CA du an, loc + phan
+   * trang theo nhieu chieu (gia, dien tich, du an, phan khu, loai hinh, khu
+   * vuc, chu dau tu, trang thai, huong, tu khoa).
+   *
+   * Nguyen tac: service la ranh gioi se thanh axios, nen moi logic loc /
+   * sap xep / phan trang deu dat o day, KHONG roi vao component hay hook.
+   *
+   * KHI CO BACKEND: GET /units?q=&developerId=&regionId=&projectSlug=
+   *                 &propertyTypeLabel=&phaseName=&direction=&status=
+   *                 &priceMin=&priceMax=&areaMax=&sort=&page=&limit=
+   */
+  allUnits: async (query: AllUnitsQuery): Promise<PaginatedAllUnits> => {
+    const all = getAllUnitsAcrossProjects();
+
+    // Map slug -> metadata de filter nhanh va tra label cho facet.
+    const projectBySlug = new Map(
+      MOCK_PROJECTS.map((project) => [project.slug, project] as const),
+    );
+
+    const normalizedKeyword = normalize(query.search.trim());
+
+    const matched = all.filter((unit) => {
+      if (query.projectSlug && unit.projectSlug !== query.projectSlug) return false;
+
+      const project = projectBySlug.get(unit.projectSlug);
+      if (query.developerId && project?.developerId !== query.developerId) return false;
+      if (query.regionId && project?.regionId !== query.regionId) return false;
+
+      if (query.propertyTypeLabel && unit.propertyTypeLabel !== query.propertyTypeLabel) {
+        return false;
+      }
+      if (query.phaseName && unit.phaseName !== query.phaseName) return false;
+      if (query.direction && unit.direction !== query.direction) return false;
+      if (query.status && unit.status !== query.status) return false;
+
+      if (query.priceMin !== null && unit.listedPrice < query.priceMin) return false;
+      if (query.priceMax !== null && unit.listedPrice > query.priceMax) return false;
+
+      // Tu "dien tich dat toi da N m2" - can hop le neu dat khong vuot N.
+      if (query.areaMax !== null && unit.landArea > query.areaMax) return false;
+
+      if (!normalizedKeyword) return true;
+
+      // Tim theo ma can, ten du an, chu dau tu, phan khu, dia chi.
+      const haystack = normalize(
+        `${unit.code} ${unit.projectName} ${unit.developerName} ${unit.phaseName} ${project?.address ?? ''}`,
+      );
+      return haystack.includes(normalizedKeyword);
+    });
+
+    // Sort rieng cho UnitWithProject (them projectIsHot lam thu tu phu).
+    const sorted = [...matched];
+    switch (query.sort) {
+      case 'gia-tang':
+        sorted.sort((a, b) => a.listedPrice - b.listedPrice);
+        break;
+      case 'gia-giam':
+        sorted.sort((a, b) => b.listedPrice - a.listedPrice);
+        break;
+      case 'dien-tich-tang':
+        sorted.sort((a, b) => a.landArea - b.landArea);
+        break;
+      case 'dien-tich-giam':
+        sorted.sort((a, b) => b.landArea - a.landArea);
+        break;
+      default:
+        // Mac dinh: can cua du an HOT truoc, sau do gia niem yet tang dan.
+        sorted.sort((a, b) => {
+          if (a.projectIsHot !== b.projectIsHot)
+            return Number(b.projectIsHot) - Number(a.projectIsHot);
+          return a.listedPrice - b.listedPrice;
+        });
+    }
+
+    const start = (query.page - 1) * query.limit;
+
+    // Facet dua tren TAP DA LOC - bo qua chinh no de khi chon 1 gia tri cua
+    // facet A thi facet B van goi y cac lua chon con lai cua nhung can khop A.
+    const facet = (exclude: 'projectSlug' | 'developerId' | 'regionId') => {
+      const seen = new Set<string>();
+      const result: { value: string; label: string }[] = [];
+      for (const unit of matched) {
+        const project = projectBySlug.get(unit.projectSlug);
+        if (exclude === 'projectSlug') {
+          if (seen.has(unit.projectSlug)) continue;
+          seen.add(unit.projectSlug);
+          result.push({ value: unit.projectSlug, label: unit.projectName });
+          continue;
+        }
+        if (exclude === 'developerId' && project) {
+          const key = project.developerId;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          result.push({ value: project.developerId, label: project.developerName });
+          continue;
+        }
+        if (exclude === 'regionId' && project) {
+          const key = project.regionId;
+          if (seen.has(key)) continue;
+          seen.add(key);
+          result.push({ value: project.regionId, label: project.regionName });
+        }
+      }
+      return result.sort((a, b) => a.label.localeCompare(b.label, 'vi'));
+    };
+
+    return delay({
+      units: sorted.slice(start, start + query.limit),
+      total: sorted.length,
+      page: query.page,
+      limit: query.limit,
+      facets: {
+        projectSlugs: facet('projectSlug'),
+        developerIds: facet('developerId'),
+        regionIds: facet('regionId'),
+        propertyTypeLabels: [...new Set(matched.map((unit) => unit.propertyTypeLabel))].sort(),
+        phaseNames: [...new Set(matched.map((unit) => unit.phaseName))].sort(),
+        directions: [...new Set(matched.map((unit) => unit.direction))].sort(),
+        statuses: [...new Set(matched.map((unit) => unit.status))],
+      },
+    });
+  },
+
+  /**
+   * San pham noi bat cho trang chu - gop can cua TAT CA du an.
+   *
+   * Quy tac chon (uu tien giam dan):
+   *   1. Con hang ('con-hang')
+   *   2. Cua du an HOT
+   *   3. Da dang du an: lay round-robin qua tung du an, tranh canh 1 du an
+   *      chiem het cac slot (moi du an toi da `perProjectLimit` can)
+   *
+   * Khong loc theo gia/dien tich/loai hinh - do la viec cua trang /du-an.
+   * Section "San pham noi bat" tren trang chu chi can lay cai nhin tong quan.
+   *
+   * KHI CO BACKEND: GET /units/featured?limit=12
+   */
+  featuredUnits: async (limit = 12, perProjectLimit = 3): Promise<UnitWithProject[]> => {
+    const all = getAllUnitsAcrossProjects();
+
+    // Bo can da ban + giu cho - trang chu chi trung bay hang con ban
+    const available = all.filter((unit) => unit.status === 'con-hang');
+
+    // Nhom theo du an de chon round-robin
+    const byProject = new Map<string, UnitWithProject[]>();
+    for (const unit of available) {
+      const list = byProject.get(unit.projectSlug) ?? [];
+      list.push(unit);
+      byProject.set(unit.projectSlug, list);
+    }
+
+    // Trong moi du an: can HOT len dau (can cua du an isHot), sau do gia
+    // niem yet tang dan de gia re xuat hien truoc
+    for (const [projectSlug, list] of byProject) {
+      const projectIsHot = list[0]?.projectIsHot ?? false;
+      list.sort((a, b) => {
+        // projectIsHot khong doi theo unit nen lay tu bat ky element nao
+        const aHot = a.projectIsHot === projectIsHot ? 0 : a.projectIsHot ? -1 : 1;
+        const bHot = b.projectIsHot === projectIsHot ? 0 : b.projectIsHot ? -1 : 1;
+        if (aHot !== bHot) return aHot - bHot;
+        return a.listedPrice - b.listedPrice;
+      });
+      byProject.set(projectSlug, list);
+    }
+
+    // Thu tu project: HOT truoc, sau do theo ten de on dinh giua cac lan goi
+    const projectOrder = [...byProject.keys()].sort((a, b) => {
+      const aHot = byProject.get(a)?.[0]?.projectIsHot ?? false;
+      const bHot = byProject.get(b)?.[0]?.projectIsHot ?? false;
+      if (aHot !== bHot) return Number(bHot) - Number(aHot);
+      return a.localeCompare(b);
+    });
+
+    const picked: UnitWithProject[] = [];
+    let exhausted = false;
+
+    // Moi vong lay 1 can tu moi du an (trong gioi han perProjectLimit)
+    while (!exhausted && picked.length < limit) {
+      exhausted = true;
+      for (const slug of projectOrder) {
+        if (picked.length >= limit) break;
+        const list = byProject.get(slug);
+        if (!list) continue;
+        const taken = picked.filter((u) => u.projectSlug === slug).length;
+        if (taken >= perProjectLimit) continue;
+        const next = list[taken];
+        if (!next) continue;
+        picked.push(next);
+        exhausted = false;
+      }
+    }
+
+    return delay(picked);
   },
 };

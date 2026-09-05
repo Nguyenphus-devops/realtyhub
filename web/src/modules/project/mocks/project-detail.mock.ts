@@ -34,6 +34,7 @@ import type {
   SalesPolicy,
   UnitFundType,
   UnitStatus,
+  UnitWithProject,
 } from '../models/project-detail.model';
 import { PROPERTY_TYPE_LABELS, type Project } from '../models/project.model';
 import {
@@ -1022,4 +1023,37 @@ export const getPhaseDetail = (
 export const getProjectUnits = (slug: string): ProjectUnit[] => {
   ensureBuilt(slug);
   return unitCache.get(slug) ?? [];
+};
+
+/**
+ * Bang hang gop cua TAT CA du an.
+ *
+ * Moi can kem theo metadata du an (slug, name, developerName, isHot, segment)
+ * de card co the hien ten du an + chu dau tu + nhan HOT ma khong can service
+ * phai join them mot lan nua.
+ *
+ * Dung cho section "San pham noi bat" tren trang chu - luon lay can tu nhieu
+ * du an khac nhau de tranh trang thai chi co can cua 1-2 du an.
+ */
+export const getAllUnitsAcrossProjects = (): UnitWithProject[] => {
+  const result: UnitWithProject[] = [];
+  for (const project of MOCK_PROJECTS) {
+    // Du an chua tung duoc truy cap se chua co trong unitCache - phai build
+    // truoc (cung co che voi getProjectUnits).
+    const units = unitCache.has(project.slug)
+      ? unitCache.get(project.slug)
+      : (ensureBuilt(project.slug), unitCache.get(project.slug));
+    if (!units) continue;
+    for (const unit of units) {
+      result.push({
+        ...unit,
+        projectSlug: project.slug,
+        projectName: project.name,
+        developerName: project.developerName,
+        segment: project.segment,
+        projectIsHot: project.isHot,
+      });
+    }
+  }
+  return result;
 };

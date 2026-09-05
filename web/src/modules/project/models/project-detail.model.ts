@@ -302,6 +302,82 @@ export type PaginatedUnits = {
 /** So can toi da duoc chon mot luc de mang sang trang so sanh */
 export const MAX_UNIT_SELECTION = 5;
 
+/**
+ * Truy van quy can tong hop (tat ca du an).
+ *
+ * Tuong tu `UnitQuery` nhung khong co `phaseName` (moi du an co phan khu rieng,
+ * khong gop chung duoc) va them cac bo loc ngang hang du an: projectSlug,
+ * developerId, regionId. Trang /quy-can dung query nay.
+ */
+export type AllUnitsQuery = {
+  page: number;
+  limit: number;
+  sort: UnitSort;
+  search: string;
+  projectSlug: string | null;
+  developerId: string | null;
+  regionId: string | null;
+  propertyTypeLabel: string | null;
+  phaseName: string | null;
+  direction: string | null;
+  status: UnitStatus | null;
+  /** Loc theo khoang gia (VND) */
+  priceMin: number | null;
+  priceMax: number | null;
+  /** Loc theo dien tich dat toi da (m2) */
+  areaMax: number | null;
+};
+
+export const DEFAULT_ALL_UNITS_QUERY: AllUnitsQuery = {
+  page: 1,
+  limit: 24,
+  sort: 'mac-dinh',
+  search: '',
+  projectSlug: null,
+  developerId: null,
+  regionId: null,
+  propertyTypeLabel: null,
+  phaseName: null,
+  direction: null,
+  status: null,
+  priceMin: null,
+  priceMax: null,
+  areaMax: null,
+};
+
+export type PaginatedAllUnits = {
+  units: UnitWithProject[];
+  total: number;
+  page: number;
+  limit: number;
+  /** Facet dua tren TOAN BO can (khong chi trang hien tai) de bo loc co lua
+      chon on dinh giua cac lan chuyen trang. */
+  facets: {
+    projectSlugs: { value: string; label: string }[];
+    developerIds: { value: string; label: string }[];
+    regionIds: { value: string; label: string }[];
+    propertyTypeLabels: string[];
+    phaseNames: string[];
+    directions: string[];
+    statuses: UnitStatus[];
+  };
+};
+
+/**
+ * Can + metadata du an di kem.
+ *
+ * Dung cho cac cho can hien can cua nhieu du an tren cung mot trang (vi du
+ * trang chu): card se can ten du an, chu dau tu, segment... ma khong can
+ * service phai join them mot lan nua.
+ */
+export type UnitWithProject = ProjectUnit & {
+  projectSlug: string;
+  projectName: string;
+  developerName: string;
+  segment: Project['segment'];
+  projectIsHot: boolean;
+};
+
 // ── Tab: Anh 360 ───────────────────────────────────────────────────────────
 
 export type PanoramaHotspot = {
