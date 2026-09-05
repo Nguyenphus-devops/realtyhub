@@ -6,3 +6,4 @@ graft/
 
 # Phu thuoc / build output (phong khi .gitignore con thieu)
 node_modules/
+web/.next-dev.log
