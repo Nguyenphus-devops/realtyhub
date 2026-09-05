@@ -36,7 +36,7 @@ const FeaturedUnits = ({ initialUnits }: FeaturedUnitsProps) => {
               Sản phẩm nổi bật
             </h2>
             <p className="mt-1 text-theme-sm text-gray-500">
-              Căn hộ/biệt thự đang mở bán từ nhiều dự án trên toàn hệ thống.
+              {/* Căn hộ/biệt thự đang mở bán từ nhiều dự án trên toàn hệ thống. */}
             </p>
           </div>
           <Link

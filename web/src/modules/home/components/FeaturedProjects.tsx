@@ -71,7 +71,7 @@ const FeaturedProjects = ({ projects: initialProjects }: FeaturedProjectsProps) 
               Dự án nổi bật
             </h2>
             <p className="mt-1 text-theme-sm text-gray-500">
-              Những dự án đang được quan tâm nhiều nhất tuần qua.
+              {/* Những dự án đang được quan tâm nhiều nhất tuần qua. */}
             </p>
           </div>
           <Link

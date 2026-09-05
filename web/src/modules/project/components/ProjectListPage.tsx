@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Pagination from '@/common/components/Pagination';
-import NewsSection from '@/modules/news/components/NewsSection';
 import ProjectCard from './ProjectCard';
 import ProjectFilterBar, {
   type ProjectFilterValues,
@@ -507,8 +506,6 @@ const ProjectListPage = () => {
             groups={highlightsQuery.data ?? []}
             isLoading={highlightsQuery.isLoading}
           />
-
-          <NewsSection />
         </>
       )}
     </div>

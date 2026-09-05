@@ -1,6 +1,7 @@
 'use client';
 
 import NewsSpotlight from '@/modules/news/components/NewsSpotlight';
+import EventsSection from '@/modules/events/components/EventsSection';
 import FeaturedUnits from '@/modules/project/components/FeaturedUnits';
 import { useHomeContent } from '../hooks/useHome';
 import type { HomeContent } from '../models/home.model';
@@ -30,6 +31,7 @@ const HomePage = ({ initialContent }: HomePageProps) => {
         </div>
         <FeaturedProjects projects={content.featuredProjects} />
         <FeaturedUnits initialUnits={content.featuredUnits} />
+        <EventsSection />
         <Doitac initialInvestors={content.investors} />
         <div className="bg-white">
           <div className="site-container">

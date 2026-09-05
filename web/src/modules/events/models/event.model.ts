@@ -35,6 +35,16 @@ export type EventSpeaker = {
   initials?: string;
 };
 
+/** 1 tai lieu dinh kem (PDF, slide, ...). */
+export type EventDocument = {
+  name: string;
+  url: string;
+  /** MIME / loai file (pdf, pptx, xlsx, ...) */
+  type: string;
+  /** Kich thuoc file (bytes), optional */
+  size?: number;
+};
+
 export type EventItem = {
   publicId: string;
   slug: string;
@@ -55,7 +65,7 @@ export type EventItem = {
   location: EventLocation;
   /** Tong so cho (null neu khong gioi han) */
   capacity?: number;
-  /** So da dang ky */
+  /** So da dang ky (alias cua registrationCount, giu de tuong thich code cu) */
   registered: number;
   /** Hinh thuc tham du: 'free' | 'paid' */
   isFree: boolean;
@@ -65,10 +75,27 @@ export type EventItem = {
   speakers?: EventSpeaker[];
   /** Tags phu (VD: 'CRM', 'Phap ly', 'Marketing') */
   tags?: string[];
-  /** Anh bia. Su kien online khong co dia diem that nen de trong. */
+  /** Anh bia (cover). Su kien online khong co dia diem that nen de trong. */
   coverImage?: string;
   /** URL thumbnail (chua co -> PlaceholderThumb) */
   thumbnailUrl?: string;
+
+  // ====== Fields mo rong (mock day du cho trang detail) ======
+
+  /** Ten don vi to chuc (VD: "RealtyHub Academy", "VinHomes Sales Team"). */
+  organizer?: string;
+  /** So nguoi da dang ky (alias rõ ràng cho registered). */
+  registrationCount?: number;
+  /** So nguoi da check-in (render o trang detail). */
+  checkinCount?: number;
+  /** URL QR check-in rieng cua event (mo phong). */
+  checkinQr?: string;
+  /** URL thiệp mời (invitation image) rieng cua event. */
+  invitationImage?: string;
+  /** Danh sach tai lieu dinh kem. */
+  documents?: EventDocument[];
+  /** Co dang mo dang ky hay khong (set false khi event da ket thuc / full). */
+  isRegistrationOpen?: boolean;
 };
 
 // ============================================================================

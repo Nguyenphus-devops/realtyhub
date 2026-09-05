@@ -19,7 +19,7 @@ export const MOCK_BANNERS: HomeBannerSlide[] = [
     publicId: 'banner-001',
     headline: '#1 NỀN TẢNG DÀNH CHO NHÀ MÔI GIỚI BẤT ĐỘNG SẢN',
     subheadline: 'CÔNG NGHỆ DÀNH RIÊNG CHO SALES – TÌM HÀNG NHANH, CHỐT DEAL TỐT',
-    subtitle: 'ĐỪNG ĐỂ KHÁCH HÀNG CỦA BẠN ĐI TÌM ĐỐI TÁC KHÁC',
+    subtitle: 'HÃY ĐỂ CHÚNG TÔI CÙNG BẠN PHỤC VỤ KHÁCH HÀNG',
     primaryCtaLabel: 'Khám phá dự án',
     secondaryCtaLabel: 'Đăng ký tư vấn',
     desktopImageUrl: '/images/home/banner/desktop/b1.jpg',
