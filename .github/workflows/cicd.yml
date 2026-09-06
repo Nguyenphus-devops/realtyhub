@@ -1,0 +1,158 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'web/**'
+      - 'backend/**'
+      - 'admin/**'
+  workflow_dispatch:
+
+jobs:
+  # 1. Phát hiện thư mục nào có sự thay đổi
+  changes:
+    name: Detect Changed Services
+    runs-on: ubuntu-latest
+    outputs:
+      web: ${{ steps.filter.outputs.web }}
+      backend: ${{ steps.filter.outputs.backend }}
+      admin: ${{ steps.filter.outputs.admin }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Path Filter
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            web:
+              - 'web/**'
+            backend:
+              - 'backend/**'
+            admin:
+              - 'admin/**'
+
+  # ==========================================
+  # WEB SERVICE (Port 8826)
+  # ==========================================
+  web:
+    name: Build & Deploy Web
+    needs: changes
+    if: needs.changes.outputs.web == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: 'web/package-lock.json'
+
+      - name: Build Web
+        run: |
+          cd web
+          npm install
+          npm run build
+
+      - name: Deploy Web via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          command_timeout: 30m
+          script: |
+            cd /home/realtyhub
+            cd web
+            eval $(ssh-agent -s)
+            ssh-add ~/.ssh/id_rsa
+            docker compose up -d --build 
+            docker ps 
+
+  # ==========================================
+  # BACKEND SERVICE (Port 8827)
+  # ==========================================
+  backend:
+    name: Build & Deploy Backend
+    needs: changes
+    if: needs.changes.outputs.backend == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: 'backend/package-lock.json'
+
+      - name: Build Backend
+        run: |
+          cd backend
+          npm install
+          npm run build
+
+      - name: Deploy Backend via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          command_timeout: 30m
+          script: |
+            cd /home/realtyhub
+            cd backend
+            eval $(ssh-agent -s)
+            ssh-add ~/.ssh/id_rsa
+            docker compose up -d --build 
+            docker ps 
+
+  # ==========================================
+  # ADMIN SERVICE (Port 8828)
+  # ==========================================
+  admin:
+    name: Build & Deploy Admin
+    needs: changes
+    if: needs.changes.outputs.admin == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: 'admin/package-lock.json'
+
+      - name: Build Admin
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:8011
+        run: |
+          cd admin
+          npm install
+          npm run build
+
+      - name: Deploy Admin via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          command_timeout: 30m
+          script: |
+            cd /home/realtyhub
+            cd admin
+            eval $(ssh-agent -s)
+            ssh-add ~/.ssh/id_rsa
+            docker compose up -d --build 
+            docker ps 
